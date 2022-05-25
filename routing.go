@@ -1,12 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
-
-var people []person
 
 type person struct {
 	ID    string `json:"id"`
@@ -20,6 +19,7 @@ func startRouter() {
 	router := gin.Default()
 	router.GET("/people", getPeople)
 	router.POST("/people", addPeople)
+	router.DELETE("/people/remove/:id", removePerson)
 	router.Run("localhost:3000")
 }
 
@@ -34,11 +34,18 @@ func getPeople(c *gin.Context) {
 ////Add people into the server/ database using the POST method
 **/
 func addPeople(c *gin.Context) {
-	var newPerson person
+	var newPerson = person{"3", "Johnathan", "1999-20-12", "09781787873"}
+	fmt.Print(addPersonToDB(newPerson))
 	if err := c.BindJSON(&newPerson); err != nil {
 		return
 	}
-	people = append(people, newPerson)
 
 	c.IndentedJSON(http.StatusCreated, newPerson)
+}
+
+////Remove people from the server using the ID
+func removePerson(c *gin.Context) {
+	id := c.Params.ByName("id")
+	removePersonFromDB(id)
+	c.IndentedJSON(200, getPeopleFromDB())
 }
