@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 )
 
 ///establishing a database connection
@@ -14,7 +13,7 @@ func estDB() *sql.DB {
 	return db
 }
 
-///adding a new person to the database C
+///adding a new person to the database -  C
 func addPersonToDB(per person) (success bool) {
 	db := estDB()
 	var st = "INSERT INTO People(Name,Phone,Dob) VALUES(?,?,?)"
@@ -37,12 +36,12 @@ func getPeopleFromDB() (people []person) {
 	for rows.Next() {
 		var per person
 		rows.Scan(&per.ID, &per.Name, &per.Phone, &per.Dob)
-		fmt.Print("person: ?", per)
 		people = append(people, per)
 	}
 	return people
 }
 
+////removing the person from the database using the ID of the person
 func removePersonFromDB(id string) (success bool) {
 	db := estDB()
 	var st = "DELETE FROM People WHERE ID = ?"

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -34,18 +33,18 @@ func getPeople(c *gin.Context) {
 ////Add people into the server/ database using the POST method
 **/
 func addPeople(c *gin.Context) {
-	var newPerson = person{"3", "Johnathan", "1999-20-12", "09781787873"}
-	fmt.Print(addPersonToDB(newPerson))
-	if err := c.BindJSON(&newPerson); err != nil {
+	var newPerson = person{}
+	err := c.BindJSON(&newPerson)
+	if err != nil {
 		return
 	}
-
+	addPersonToDB(newPerson)
 	c.IndentedJSON(http.StatusCreated, newPerson)
 }
 
-////Remove people from the server using the ID
+////Remove people from the server using the ID - Delete method
 func removePerson(c *gin.Context) {
 	id := c.Params.ByName("id")
 	removePersonFromDB(id)
-	c.IndentedJSON(204, getPeopleFromDB())
+	c.IndentedJSON(http.StatusOK, getPeopleFromDB())
 }
