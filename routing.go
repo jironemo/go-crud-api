@@ -18,7 +18,7 @@ type person struct {
 func startRouter() {
 	router := gin.Default()
 	router.GET("/people", getPeople)
-	router.POST("/people", addPeople)
+	router.POST("/people/add", addPeople)
 	router.DELETE("/people/remove/:id", removePerson)
 	router.Run("localhost:3000")
 }
@@ -47,5 +47,5 @@ func addPeople(c *gin.Context) {
 func removePerson(c *gin.Context) {
 	id := c.Params.ByName("id")
 	removePersonFromDB(id)
-	c.IndentedJSON(200, getPeopleFromDB())
+	c.IndentedJSON(204, getPeopleFromDB())
 }
